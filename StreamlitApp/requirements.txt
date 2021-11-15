@@ -1,6 +1,6 @@
-matplotlib==3.4.3
-streamlit==0.84.1
-spacy==3.1.3
-textblob==0.15.3
 wordcloud==1.8.1
+streamlit==0.84.1
+textblob==0.17.1
+spacy==3.1.3
+matplotlib==3.4.3
 neattext==0.1.2
