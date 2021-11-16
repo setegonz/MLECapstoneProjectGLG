@@ -14,6 +14,7 @@ from textblob import TextBlob
 import spacy
 # from gensim.summarization import summarize
 import neattext as nt
+from langdetect import detect
 
 
 # Viz Pkgs
@@ -51,16 +52,16 @@ def main():
     #st.title("NLP Simple Examples")
 
     title_templ = """
-    <div style="background-color:blue;padding:8px;">
-    <h1 style="color:cyan">NLP Simple Examples</h1>
+    <div style="background-color:#EB008D;padding:8px;">
+    <h1 style="color:white">NLP Simple Examples</h1>
     </div>
     """
 
     st.markdown(title_templ,unsafe_allow_html=True)
 
     subheader_templ = """
-    <div style="background-color:cyan;padding:8px;">
-    <h3 style="color:blue">Natural Language Processing On the Go...</h3>
+    <div style="background-color:#696969;padding:8px;">
+    <h3 style="color:white">Natural Language Processing On the Go...</h3>
     </div>
     """
 
@@ -90,7 +91,7 @@ def main():
             	blob = TextBlob(raw_text)
             	st.write("")
 
-            	if blob.detect_language() != 'en':
+            	if detect(raw_text) != 'en':
             		st.warning("Enter a Text in English...")
             	else:
             		st.info("Basic Functions")
