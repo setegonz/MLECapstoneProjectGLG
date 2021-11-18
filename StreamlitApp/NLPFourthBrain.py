@@ -238,9 +238,9 @@ def main():
         ### NLP Examples (NLP with Streamlit)
 
         ##### By
-        + **[Almicia Dunson](https://github.com/almicia)**
-        + **[Nafize Paiker](https://github.com/nrpaiker017)**
-        + **[Steven González](https://github.com/setegonz)**
+        + **[Almicia Dunson](https://www.linkedin.com/in/almicia)**
+        + **[Nafize Paiker](https://www.linkedin.com/in/nrpaiker)**
+        + **[Steven González](https://www.linkedin.com/in/sgonzalezlugo/)**
         """)
 
 
