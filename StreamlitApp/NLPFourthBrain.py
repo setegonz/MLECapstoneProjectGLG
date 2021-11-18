@@ -5,14 +5,14 @@ Spacy Model: python -m spacy download en_core_web_sm
 
 # Core Pkgs
 import streamlit as st
-st.set_page_config(page_title="NLP Simple Examples", page_icon="RML_Logo.png", layout='centered', initial_sidebar_state='auto')
+st.set_page_config(page_title="NLP On The Go", page_icon="RML_Logo.png", layout='centered', initial_sidebar_state='auto')
 
 
 
 # NLP Pkgs
 from textblob import TextBlob
 import spacy
-# from gensim.summarization import summarize
+# import gensim
 import neattext as nt
 from langdetect import detect
 
@@ -32,6 +32,17 @@ def text_analyzer(my_text):
     allData = [('"Token":{},\n"Lemma":{}'.format(token.text,token.lemma_))for token in docx ]
     return allData
 
+#NER
+@st.cache
+def entity_analyzer(my_text):
+	nlp = spacy.load("en_core_web_sm")
+	docx = nlp(my_text)
+	tokens = [ token.text for token in docx]
+	entities = [(entity.text,entity.label_)for entity in docx.ents]
+	allData = ['"Entities":{}'.format(entities)]
+	return entities
+
+
 
 
 
@@ -47,13 +58,11 @@ def plot_wordcloud(my_text):
 
 
 def main():
-    """NLP App with Streamlit and TextBlob"""
-
-    #st.title("NLP Simple Examples")
+    """NLP App with Streamlit"""
 
     title_templ = """
     <div style="background-color:#EB008D;padding:8px;">
-    <h1 style="color:white">NLP Simple Examples</h1>
+    <h1 style="color:white">NLP On The Go</h1>
     </div>
     """
 
@@ -67,10 +76,9 @@ def main():
 
     st.markdown(subheader_templ,unsafe_allow_html=True)
 
-    # st.sidebar.image("https://www.centreofexcellence.com/app/uploads/2016/09/nlp-diploma-course.jpg", use_column_width=True)
     st.sidebar.image("https://images.squarespace-cdn.com/content/v1/5d5ebe0290b74100011fd096/1596042157547-KXGXKTJQ4KH2DDXM5726/FourthBrain%28noDescritor%29Logo.png", use_column_width=True)
 
-    activity = ["Text Analysis", "NER", "Topic Modeling", "About"]
+    activity = ["Text Analysis", "About"]
     choice = st.sidebar.selectbox("Menu",activity)
 
 
@@ -95,7 +103,7 @@ def main():
             		st.warning("Enter a Text in English...")
             	else:
             		st.info("Basic Functions")
-            		col1, col2 = st.beta_columns(2)
+            		col1, col2 = st.beta_columns([15,1])
 
             		with col1:
             			with st.beta_expander("Basic Info"):
@@ -112,7 +120,7 @@ def main():
             				stop_w = nt.TextExtractor(raw_text).extract_stopwords()
             				st.error(stop_w)
 
-            		with col2:
+            		# with col2:
             			with st.beta_expander("Processed Text"):
             				st.success("Stopwords Excluded Text")
             				processed_text = str(nt.TextFrame(raw_text).remove_stopwords())
@@ -127,7 +135,8 @@ def main():
             		st.write("")
             		st.write("")
             		st.info("Advanced Features")
-            		col3, col4 = st.beta_columns(2)
+            		# col3, col4 = st.beta_columns(2)
+            		col3,col4 = st.beta_columns([15,1])
 
             		with col3:
             			with st.beta_expander("Tokens&Lemmas"):
@@ -137,30 +146,26 @@ def main():
             				processed_text_fin = str(nt.TextFrame(processed_text_mid).remove_special_characters())
             				tandl = text_analyzer(processed_text_fin)
             				st.json(tandl)
-
-            		# with col4:
-            		# 	with st.beta_expander("Summarize"):
-            		# 		st.success("Summarize")
-            		# 		summary_text = summarize(raw_text,ratio=0.4)
-            		# 		if summary_text != "":
-            		# 			st.success(summary_text)
-            		# 		else:
-            		# 			st.warning("Please insert a Longer Text")
-
-
+            			with st.beta_expander("NER"):
+            				st.write("NER")
+            				processed_text_mid = str(nt.TextFrame(raw_text).remove_stopwords())
+            				processed_text_mid = str(nt.TextFrame(processed_text_mid).remove_puncts())
+            				processed_text_fin = str(nt.TextFrame(processed_text_mid).remove_special_characters())
+            				tandl = entity_analyzer(processed_text_fin)
+            				st.json(tandl)
 
 
 
     # NER CHOICE
-    elif choice == 'NER':
-
-        st.subheader("Text NER")
-
-        st.write("")
-        st.write("")
-        raw_text = st.text_area("","Write something to find named entities...")
-        if len(raw_text) < 3:
-            st.warning("Please provide a longer text...")
+    # elif choice == 'NER':
+    #
+    #     st.subheader("Text NER")
+    #
+    #     st.write("")
+    #     st.write("")
+    #     raw_text = st.text_area("","Write something to find named entities...")
+    #     if len(raw_text) < 3:
+    #         st.warning("Please provide a longer text...")
     #     else:
     #         blob = TextBlob(raw_text)
     #         lang = blob.detect_language()
@@ -195,12 +200,12 @@ def main():
 
 
     # Topic Modeling CHOICE
-    elif choice == 'Topic Modeling':
-
-        st.subheader("Topic Modeling")
-
-        st.write("")
-        st.write("")
+    # elif choice == 'Topic Modeling':
+    #
+    #     st.subheader("Topic Modeling")
+    #
+    #     st.write("")
+    #     st.write("")
     #
     #     raw_text = st.text_area("", "Enter a Text...")
     #
@@ -229,21 +234,13 @@ def main():
 
         st.write("")
         st.write("")
-
-        # st.markdown("""
-        # ### NLP Simple Examples (App with Streamlit and TextBlob)
-        #
-        # ##### By
-        # + **[Rosario Moscato LAB](https://www.youtube.com/channel/UCDn-FahQNJQOekLrOcR7-7Q)**
-        # + [rosariomoscatolab@gmail.com](mailto:rosariomoscatolab@gmail.com)
-        # """)
         st.markdown("""
-        ### NLP Simple Examples (App with Streamlit and TextBlob)
+        ### NLP Examples (NLP with Streamlit)
 
         ##### By
-        + Almicia Dunson
-        + Steven González
-        + Nafize Paiker
+        + **[Almicia Dunson](https://github.com/almicia)**
+        + **[Nafize Paiker](https://github.com/nrpaiker017)**
+        + **[Steven González](https://github.com/setegonz)**
         """)
 
 
